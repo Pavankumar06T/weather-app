@@ -1,87 +1,41 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #1f2c4c, #2b74b9);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-}
+const apiKey = "154f0ccd69271e2445b48f1ad84a05cb";
 
-.container {
-  background: #243b55;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-  max-width: 700px;
-  width: 100%;
-}
+function getWeather() {
+  const city = document.getElementById("cityInput").value;
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
+    .then(response => response.json())
+    .then(data => {
+      const today = data.list[0];
+      const highlights = `
+        <h2>Today's Highlights</h2>
+        <p>🌡️ Feels like: ${today.main.feels_like}°C</p>
+        <p>💧 Humidity: ${today.main.humidity}%</p>
+        <p>🧭 Pressure: ${today.main.pressure} hPa</p>
+        <p>🌬️ Wind: ${today.wind.speed} m/s</p>
+      `;
+      document.getElementById("weatherDetails").innerHTML = highlights;
 
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  margin-bottom: 15px;
-}
+      // Forecast for every 8th item (24 hrs)
+      const forecastList = data.list.filter((item, index) => index % 8 === 0).slice(0, 5);
+      let forecastHTML = "";
+      forecastList.forEach(item => {
+        const date = new Date(item.dt_txt).toDateString().split(' ').slice(0, 3).join(' ');
+        forecastHTML += `
+          <div class="forecast-day">
+            <h3>${date}</h3>
+            <p>🌡️ Temp: ${item.main.temp}°C</p>
+            <p>☁️ Weather: ${item.weather[0].main}</p>
+            <p>💧 Humidity: ${item.main.humidity}%</p>
+          </div>
+        `;
+      });
 
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #2ecc71;
-  color: white;
-  border: none;
-  font-size: 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-button:hover {
-  background-color: #27ae60;
-}
-
-.highlights {
-  background: #2d3e50;
-  padding: 20px;
-  border-radius: 15px;
-  margin-top: 20px;
-}
-
-.forecast {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.forecast-day {
-  background: #34526f;
-  padding: 15px;
-  border-radius: 12px;
-  min-width: 110px;
-  text-align: center;
-  flex-grow: 1;
-}
-
-/* Responsive Layout */
-@media (max-width: 768px) {
-  .forecast {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .forecast-day {
-    width: 100%;
-  }
+      document.getElementById("forecast").innerHTML = forecastHTML;
+    })
+    .catch(error => {
+      document.getElementById("weatherDetails").innerHTML = `<p>Error: City not found</p>`;
+      document.getElementById("forecast").innerHTML = "";
+      console.error("Error:", error);
+    });
 }
