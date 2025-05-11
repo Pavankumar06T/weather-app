@@ -1,48 +1,94 @@
-async function getForecast() {
-  const city = document.getElementById("cityInput").value;
-  const apiKey = "154f0ccd69271e2445b48f1ad84a05cb";
-  const forecastContainer = document.getElementById("forecastContainer");
-  const highlights = document.getElementById("todayHighlights");
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #1f3c88, #4facfe);
+  color: white;
+}
 
-  if (!city) {
-    forecastContainer.innerHTML = "<p>Please enter a city name.</p>";
-    return;
+.container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+  text-align: center;
+}
+
+input[type="text"] {
+  padding: 10px;
+  width: 60%;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #00c896;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.forecast-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 30px;
+  padding: 10px;
+}
+
+/* Today's Highlights */
+.highlights {
+  background-color: #2d3e50;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  flex: 1;
+}
+
+/* 5-Day Forecast */
+.forecast {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 2;
+}
+
+.forecast-day {
+  background-color: #3b4a5a;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+/* Responsive layout for larger screens */
+@media (min-width: 768px) {
+  .forecast-container {
+    flex-direction: row;
   }
 
-  const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+  .highlights {
+    order: 2;
+  }
 
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("City not found.");
-    const data = await res.json();
+  .forecast {
+    order: 1;
+    flex-direction: column;
+  }
+}
 
-    const dailyForecasts = data.list.filter(forecast => forecast.dt_txt.includes("12:00:00"));
-    const today = data.list[0]; // First item is closest to current
+@media (min-width: 992px) {
+  .forecast {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
 
-    forecastContainer.innerHTML = "";
-
-    dailyForecasts.forEach(day => {
-      const date = new Date(day.dt_txt).toDateString();
-      const icon = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
-
-      const html = `
-        <div class="forecast-box">
-          <h3>${date}</h3>
-          <img src="${icon}" alt="${day.weather[0].description}">
-          <p><strong>${day.weather[0].main}</strong></p>
-          <p>${day.main.temp}°C</p>
-        </div>
-      `;
-      forecastContainer.innerHTML += html;
-    });
-
-    // Today's Highlights
-    document.getElementById("feelsLike").innerHTML = `🌡️ Feels like: ${today.main.feels_like}°C`;
-    document.getElementById("humidity").innerHTML = `💧 Humidity: ${today.main.humidity}%`;
-    document.getElementById("pressure").innerHTML = `🧭 Pressure: ${today.main.pressure} hPa`;
-    document.getElementById("wind").innerHTML = `💨 Wind: ${today.wind.speed} m/s`;
-
-  } catch (err) {
-    forecastContainer.innerHTML = `<p>Error: ${err.message}</p>`;
+  .forecast-day {
+    flex: 1 1 calc(50% - 20px);
+    min-width: 180px;
   }
 }
