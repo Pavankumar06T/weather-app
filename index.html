@@ -2,25 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Weather Forecast</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Weather Forecast</h1>
-    <input type="text" id="cityInput" placeholder="Enter city name" />
-    <button onclick="getWeather()">Get Forecast</button>
+    <div class="search-box">
+      <input type="text" id="cityInput" placeholder="Enter City Name">
+      <button onclick="getWeather()">Get Forecast</button>
+    </div>
 
-    <div class="forecast-container">
-      <!-- Today's Highlights -->
-      <div class="highlights" id="weatherDetails">
-        <!-- Populated by JS -->
+    <div class="weather-wrapper">
+      <div class="today-weather">
+        <h2>Today's Highlights</h2>
+        <p id="feels_like"></p>
+        <p id="humidity"></p>
+        <p id="pressure"></p>
+        <p id="wind"></p>
       </div>
 
-      <!-- 5-Day Forecast -->
-      <div class="forecast" id="forecast">
-        <!-- Populated by JS -->
+      <div class="forecast">
+        <h2>5-Day Forecast</h2>
+        <div id="forecastCards" class="forecast-cards"></div>
       </div>
     </div>
   </div>
