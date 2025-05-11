@@ -3,26 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Weather App</title>
+  <title>Weather Forecast</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Weather Forecast</h1>
-    <input type="text" id="cityInput" placeholder="Enter city name" />
-    <button onclick="getForecast()">Get Forecast</button>
+    <input type="text" id="cityInput" placeholder="Enter city" />
+    <button onclick="getWeather()">Get Forecast</button>
 
-    <div class="weather-section">
-      <!-- LEFT: Forecast -->
-      <div id="forecastContainer" class="forecast-container"></div>
+    <div class="forecast-container">
+      <!-- Today's Highlights -->
+      <div class="highlights" id="weatherDetails">
+        <!-- Filled by JS -->
+      </div>
 
-      <!-- RIGHT: Today's Highlights -->
-      <div id="todayHighlights" class="highlights-container">
-        <h2>Today's Highlights</h2>
-        <p id="feelsLike"></p>
-        <p id="humidity"></p>
-        <p id="pressure"></p>
-        <p id="wind"></p>
+      <!-- 5-Day Forecast -->
+      <div class="forecast" id="forecast">
+        <!-- Filled by JS -->
       </div>
     </div>
   </div>
